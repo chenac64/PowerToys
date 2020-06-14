@@ -21,8 +21,23 @@ namespace FancyZonesEditor
 
         private void OnAddZone(object sender, RoutedEventArgs e)
         {
-            _model.AddZone(new Int32Rect(_offset, _offset, (int)(Settings.WorkArea.Width * 0.6), (int)(Settings.WorkArea.Height * 0.6)));
-            _offset += 100;
+
+            if (_x_offset + ((int)(Settings.WorkArea.Width * 0.6) / 3) < (int)(Settings.WorkArea.Width * 0.6) &&
+                _y_offset + ((int)(Settings.WorkArea.Height * 0.6) / 3) < (int)(Settings.WorkArea.Height * 0.6))
+            {
+                _model.AddZone(new Int32Rect(_x_offset, _y_offset, (int)(Settings.WorkArea.Width * 0.6), (int)(Settings.WorkArea.Height * 0.6)));
+            }
+            else
+            {
+                _x_offset = _prev_x_offset + 50;
+                _y_offset = _prev_y_offset - 50;
+                _prev_x_offset = _x_offset;
+                _prev_y_offset = _y_offset;
+                _model.AddZone(new Int32Rect(_x_offset, _y_offset, (int)(Settings.WorkArea.Width * 0.6), (int)(Settings.WorkArea.Height * 0.6)));
+            }
+
+            _x_offset += 100;
+            _y_offset += 100;
         }
 
         protected new void OnCancel(object sender, RoutedEventArgs e)
@@ -31,7 +46,13 @@ namespace FancyZonesEditor
             _stashedModel.RestoreTo(_model);
         }
 
-        private int _offset = 100;
+        // private int _offset = 100;
+        private int _x_offset = 100;
+        private int _y_offset = 100;
+        private int _prev_x_offset = 0;
+        private int _prev_y_offset = 0;
+        private bool _change_start = false;
+
         private CanvasLayoutModel _model;
         private CanvasLayoutModel _stashedModel;
     }

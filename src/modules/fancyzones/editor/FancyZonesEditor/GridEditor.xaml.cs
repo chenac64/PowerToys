@@ -190,6 +190,8 @@ namespace FancyZonesEditor
 
         private void OnSplit(object o, SplitEventArgs e)
         {
+            CancelClick(null, null);
+
             UIElementCollection previewChildren = Preview.Children;
             GridZone splitee = (GridZone)o;
 
